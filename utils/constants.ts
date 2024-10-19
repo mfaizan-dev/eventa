@@ -12,6 +12,10 @@ export const RESPONSE_MESSAGES = {
   somethingWentWrong: "Something went wrong. Try again!",
   registerSuccess: "User registered successfully!",
   alreadyRegistered: "This user is already registered!",
+  bookingSuccess: "Event booked successfully!",
+  bookedAlready: "You've already booked this event!",
+  bookingCancelSuccess: "Booking cancelled successfully!",
+  profileUpdated: "Profile updated successfully!",
 };
 
 export const ASYNC_FLAGS = {
@@ -23,6 +27,7 @@ export const ASYNC_FLAGS = {
 export enum CollectionsType {
   users = "users",
   events = "events",
+  bookings = "bookings",
 }
 
 export interface EventType {
@@ -46,4 +51,12 @@ export interface UserType {
   email: string;
   contact: string;
   password: string;
+}
+
+export interface TicketQRType {
+  personName: string;
+  eventName: string;
+  eventDate: string;
+  bookingDate: string;
+  location: string;
 }

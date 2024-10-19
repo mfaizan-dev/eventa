@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { COLORS } from "@/utils/constants";
 import ExploreEventsScreen from "../(screens)/exploreEvents";
 import EventNavigator from "./eventsNavigation";
 import BookedEventsScreen from "../(screens)/bookedEvents";
+import EventAlertsScreen from "../(screens)/eventAlerts";
+import ProfileScreen from "../(screens)/profile";
 
 const Tab = createBottomTabNavigator();
 
@@ -57,7 +58,7 @@ const TabNavigator = ({ navigation, route }: any) => {
       />
       <Tab.Screen
         name={"Event Alerts"}
-        component={ExploreEventsScreen}
+        component={EventAlertsScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <FontAwesome
@@ -70,7 +71,7 @@ const TabNavigator = ({ navigation, route }: any) => {
       />
       <Tab.Screen
         name={"My Profile"}
-        component={ExploreEventsScreen}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <AntDesign

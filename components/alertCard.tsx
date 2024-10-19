@@ -1,30 +1,35 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { COLORS } from "@/utils/constants";
-import { formatDateString } from "@/utils/helpers";
+import { isEventNear } from "@/utils/helpers";
 
-const EventCard = ({ event, onPress }: any) => {
-  const { eventName, dateTime, location } = event;
-  const formattedDate = formatDateString(dateTime);
+const AlertCard = ({ alert }: any) => {
+  const { title, date, bookingDate } = alert;
+  const daysLeft = isEventNear(date);
+  let daysStr = "Today";
+  if (daysLeft === 1) daysStr = "Tomorrow";
+  else if (daysLeft > 1) {
+    daysStr = `${daysLeft} days left`;
+  }
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
+    <View style={styles.card}>
       <View>
-        <Text style={styles.eventName}>{eventName}</Text>
-        <Text style={styles.dateTime}>{formattedDate}</Text>
+        <Text style={styles.eventName}>{title}</Text>
+        <Text style={styles.dateTime}>{`Booked on ${bookingDate}`}</Text>
         <View style={{ display: "flex", flexDirection: "row", marginTop: 5 }}>
           <FontAwesome
-            name="map-marker"
+            name="bell-o"
             size={22}
             color="red"
             style={styles.marker}
           />
           <Text
             style={{ color: COLORS.secondary, marginTop: 0 }}
-          >{` ${location}`}</Text>
+          >{` ${daysStr}`}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -62,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventCard;
+export default AlertCard;

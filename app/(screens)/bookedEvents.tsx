@@ -6,21 +6,51 @@ import {
   StyleSheet,
   TextInput,
 } from "react-native";
-import EventCard from "@/components/eventCard"; // Import EventCard component
-import { COLORS, EventType } from "@/utils/constants";
+import { COLORS, RESPONSE_MESSAGES } from "@/utils/constants";
 import Controller from "@/services/controller";
 import TextCard from "@/components/textCard";
+import { useGlobalContext } from "@/context/globalContext";
+import BookedEventCard from "@/components/bookedEventCard";
+import { showAlert, showConfirmationAlert } from "@/utils/helpers";
+import Loader from "@/components/loader";
 
 const BookedEventsScreen = ({ navigation }: any) => {
+  const { userData } = useGlobalContext();
   const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [events, setEvents] = useState<EventType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [delLoading, setDelLoading] = useState<boolean>(false);
+  const [events, setEvents] = useState<any[]>([]);
 
   const fetchEvents = async () => {
     setLoading(true);
-    const events = await Controller.fetchAllEvents();
+    const events = await Controller.fetchAllBookedEvents(userData?.email);
     setEvents(events);
     setLoading(false);
+  };
+
+  const confirmCancelEvent = async (bookingId: string) => {
+    setDelLoading(true);
+    const success = await Controller.deleteBooking(bookingId);
+    showAlert(
+      success,
+      success
+        ? RESPONSE_MESSAGES.bookingCancelSuccess
+        : RESPONSE_MESSAGES.somethingWentWrong
+    );
+    setDelLoading(false);
+    if (success) {
+      await fetchEvents();
+    }
+  };
+
+  const handleCancelEvent = (bookingId: string) => {
+    showConfirmationAlert(
+      "Cancel Confirmation",
+      "Do you want to cancel this booking?",
+      () => {
+        confirmCancelEvent(bookingId);
+      }
+    );
   };
 
   useEffect(() => {
@@ -34,6 +64,7 @@ const BookedEventsScreen = ({ navigation }: any) => {
         enableReload={true}
         handleReload={fetchEvents}
       />
+      <Loader visible={delLoading} />
       <TextInput
         style={styles.searchBar}
         placeholder={"Search Event"}
@@ -51,11 +82,11 @@ const BookedEventsScreen = ({ navigation }: any) => {
               item?.eventName?.toLowerCase()?.includes(query?.toLowerCase())
             ) {
               return (
-                <EventCard
+                <BookedEventCard
                   event={item}
-                  onPress={() =>
-                    navigation.navigate("eventDetails", { event: item })
-                  }
+                  onCancelEvent={() => {
+                    handleCancelEvent(item?.bookingId);
+                  }}
                 />
               );
             }

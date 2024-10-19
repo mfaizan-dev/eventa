@@ -13,7 +13,7 @@ import TextCard from "@/components/textCard";
 
 const ExploreEventsScreen = ({ navigation }: any) => {
   const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<EventType[]>([]);
 
   const fetchEvents = async () => {

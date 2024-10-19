@@ -1,3 +1,4 @@
+import { GlobalProvider } from "@/context/globalContext";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { useEffect } from "react";
@@ -20,8 +21,10 @@ export default function RootLayout() {
     return null;
   }
   return (
-    <Stack>
-      <Stack.Screen name="(screens)" options={{ headerShown: false }} />
-    </Stack>
+    <GlobalProvider>
+      <Stack>
+        <Stack.Screen name="(screens)" options={{ headerShown: false }} />
+      </Stack>
+    </GlobalProvider>
   );
 }

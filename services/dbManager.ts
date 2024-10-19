@@ -10,6 +10,7 @@ import {
   where,
 } from "@/firebaseConfig";
 import { CollectionsType } from "@/utils/constants";
+import { randomUUID } from "expo-crypto";
 
 class DBManager {
   public static getAllDocumentsFromCollection = async (
@@ -32,9 +33,10 @@ class DBManager {
   public static storeDataInDatabase = async (
     data: any,
     collectionName: CollectionsType,
-    documentId: string
+    docId: string = ""
   ) => {
     try {
+      const documentId = docId || randomUUID();
       await setDoc(doc(db, collectionName, documentId), data);
       return true;
     } catch (error) {

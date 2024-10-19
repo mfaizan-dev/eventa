@@ -73,7 +73,7 @@ const Header = ({
         <TouchableOpacity onPress={handleLogout} style={styles.icon}>
           <MaterialCommunityIcons
             name="logout"
-            size={28}
+            size={26}
             color={COLORS.primary}
           />
         </TouchableOpacity>

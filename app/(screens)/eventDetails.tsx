@@ -1,5 +1,14 @@
 import Header from "@/components/header";
+import Loader from "@/components/loader";
+import QRCodeGenerator from "@/components/qrCode";
+import { useGlobalContext } from "@/context/globalContext";
+import Controller from "@/services/controller";
 import { COLORS, IMAGE_PLACEHOLDER } from "@/utils/constants";
+import {
+  getFormattedDate,
+  showAlert,
+  showConfirmationAlert,
+} from "@/utils/helpers";
 import { FontAwesome } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -12,12 +21,15 @@ import {
 } from "react-native";
 
 const EventDetails = ({ navigation, route }: any) => {
+  const [loading, setLoading] = useState(false);
+  const {
+    userData: { fullName, email = "" },
+  } = useGlobalContext();
   const { event = {} } = route?.params || {};
   const {
     id,
     eventName,
     dateTime,
-    seatsAvailable,
     description,
     location,
     price,
@@ -31,8 +43,24 @@ const EventDetails = ({ navigation, route }: any) => {
 
   const [imageUrl, setImageUrl] = useState<string>(image || IMAGE_PLACEHOLDER);
 
+  const handleConfirmBooking = async () => {
+    setLoading(true);
+    const { success, msg } = await Controller.bookEvent(id, email);
+    setLoading(false);
+    showAlert(success, msg);
+  };
+
+  const handleBookEvent = () => {
+    showConfirmationAlert(
+      "Booking Confirmation",
+      `Do you want to book the event ${eventName} on ${dateTime}?`,
+      handleConfirmBooking
+    );
+  };
+
   return (
     <View style={{ flex: 1 }}>
+      <Loader visible={loading} />
       <Header navigation={navigation} />
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
@@ -106,10 +134,7 @@ const EventDetails = ({ navigation, route }: any) => {
       <TouchableOpacity
         style={styles.bookButton}
         activeOpacity={0.8}
-        onPress={() => {
-          // Add your navigation logic for booking the event
-          navigation.navigate("BookEvent", { eventId: id });
-        }}
+        onPress={handleBookEvent}
       >
         <Text style={styles.bookButtonText}>Book Event</Text>
       </TouchableOpacity>

@@ -15,8 +15,10 @@ import FacebookLoginButton from "@/components/facebookLoginButton";
 import DBManager from "@/services/dbManager";
 import Controller from "@/services/controller";
 import Loader from "@/components/loader";
+import { useGlobalContext } from "@/context/globalContext";
 
 const LoginScreen = ({ navigation }: any) => {
+  const { updateUserData } = useGlobalContext();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     email: "",
@@ -53,11 +55,12 @@ const LoginScreen = ({ navigation }: any) => {
       return;
     }
     setLoading(true);
-    const success = await Controller.loginUser(email, password);
-    if (success) {
-      navigation.navigate("tabNavigation");
-    } else {
+    const userData = await Controller.loginUser(email, password);
+    if (!userData) {
       showAlert(false, "Invalid credentials!");
+    } else {
+      updateUserData(userData);
+      navigation.navigate("tabNavigation");
     }
     setLoading(false);
   };
@@ -129,24 +132,6 @@ const LoginScreen = ({ navigation }: any) => {
             </Text>
           </TouchableOpacity>
         </View>
-
-        <View style={{ marginTop: 20 }}>
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: 15,
-              color: COLORS.secondary,
-            }}
-          >
-            {"OR"}
-          </Text>
-        </View>
-        <View style={{ marginTop: 20 }}>
-          <GoogleLoginButton onPress={loginHandle} />
-        </View>
-        <View style={{ marginTop: 10 }}>
-          <FacebookLoginButton onPress={loginHandle} />
-        </View>
       </Animated.View>
     </View>
   );
@@ -166,7 +151,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   footer: {
-    flex: 3,
+    flex: 2,
     backgroundColor: "#fff",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

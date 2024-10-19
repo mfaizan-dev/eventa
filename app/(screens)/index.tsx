@@ -12,9 +12,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Entypo from "@expo/vector-icons/Entypo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDataFromAsync } from "@/utils/helpers";
+import { useGlobalContext } from "@/context/globalContext";
 
 const RootScreen = ({ navigation }: any) => {
   const [userData, setUserData] = useState(null);
+  const { updateUserData } = useGlobalContext();
 
   useEffect(() => {
     (async () => {
@@ -25,7 +27,8 @@ const RootScreen = ({ navigation }: any) => {
 
   const onPressHandler = () => {
     if (userData) {
-      navigation.navigate("tabNavigation", { userData });
+      updateUserData(userData);
+      navigation.navigate("tabNavigation");
     } else {
       navigation.navigate("login");
     }

@@ -13,14 +13,15 @@ const {
 } = require("firebase/firestore");
 
 // Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBO7bV5HQXv9SQf8tInY0eE3Q352Ysjw_c",
-  authDomain: "eventa-38b90.firebaseapp.com",
-  projectId: "eventa-38b90",
-  storageBucket: "eventa-38b90.appspot.com",
-  messagingSenderId: "406569583083",
-  appId: "1:406569583083:web:8685ab77fcfe28a99a59ae",
-  measurementId: "G-X36V073M2J",
+  apiKey: "AIzaSyAOcd7L5DswUTS8mCr54DFIY3oGU4tTAcs",
+  authDomain: "eventa-d893e.firebaseapp.com",
+  projectId: "eventa-d893e",
+  storageBucket: "eventa-d893e.appspot.com",
+  messagingSenderId: "127597181045",
+  appId: "1:127597181045:web:c52a9f6e547eef06a6603c",
+  measurementId: "G-XHC831H6XG",
 };
 
 // Initialize Firebase
